@@ -1,0 +1,57 @@
+﻿@model IEnumerable<crad_project.Models.Product>
+
+@{
+    ViewData["Title"] = "ProductList";
+}
+
+<h1>Product List</h1>
+
+<p>
+    <a asp-action="AddProduct">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Images</th>
+            <th>Created At</th>
+            <th>Category</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Description</td>
+                <td>@item.Price.ToString("F2")</td>
+                <td>@item.Stock</td>
+                <td>
+                    @if (item.ImageUrls != null && item.ImageUrls.Any())
+                    {
+                        @foreach (var imageUrl in item.ImageUrls)
+                        {
+                            <img src="@imageUrl" alt="Product Image" style="width: 80px; height: auto; margin-right: 5px;" />
+                        }
+                    }
+                    else
+                    {
+                        <span>No Image</span>
+                    }
+                </td>
+                <td>@item.CreatedAt</td>
+                <td>@(item.Category != null ? item.Category.Name.ToString() : "No Category")</td>
+                <td>
+                    <a asp-action="EditProduct" asp-route-id="@item.productId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.productId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.productId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

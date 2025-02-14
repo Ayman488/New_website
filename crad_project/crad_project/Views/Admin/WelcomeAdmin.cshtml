@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Welcome Admin";
+}
+
+<div class="container text-center mt-5">
+    <h2>👋 Welcome, Admin!</h2>
+    <p class="lead">Choose a section to navigate.</p>
+
+    <div class="d-flex justify-content-center gap-3 mt-4">
+        <a href="@Url.Action("AddCategory", "Admin")" class="btn btn-primary">Add Category</a>
+        <a href="@Url.Action("ManageProducts", "Admin")" class="btn btn-success">Manage Products</a>
+        <a href="@Url.Action("Orders", "Admin")" class="btn btn-warning">Orders</a>
+        <a href="@Url.Action("Reports", "Admin")" class="btn btn-info">Reports</a>
+    </div>
+</div>
