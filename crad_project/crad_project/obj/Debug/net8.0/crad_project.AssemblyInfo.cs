@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("crad_project")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4cbb67ee22d4d3e7da2379da91b4e80d881e23dd")]
 [assembly: System.Reflection.AssemblyProductAttribute("crad_project")]
 [assembly: System.Reflection.AssemblyTitleAttribute("crad_project")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

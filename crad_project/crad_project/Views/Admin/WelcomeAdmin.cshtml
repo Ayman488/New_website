@@ -6,10 +6,53 @@
     <h2>👋 Welcome, Admin!</h2>
     <p class="lead">Choose a section to navigate.</p>
 
-    <div class="d-flex justify-content-center gap-3 mt-4">
-        <a href="@Url.Action("AddCategory", "Admin")" class="btn btn-primary">Add Category</a>
-        <a href="@Url.Action("ManageProducts", "Admin")" class="btn btn-success">Manage Products</a>
-        <a href="@Url.Action("Orders", "Admin")" class="btn btn-warning">Orders</a>
-        <a href="@Url.Action("Reports", "Admin")" class="btn btn-info">Reports</a>
+    <div class="row mt-4">
+        <!-- كارد Add Category -->
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <img src="~/images/category.jpg" class="card-img-top" alt="Add Category">
+                <div class="card-body">
+                    <h5 class="card-title">Add Category</h5>
+                    <p class="card-text">Add new categories to your store.</p>
+                    <a href="@Url.Action("AddCategory", "Admin")" class="btn btn-primary">Go to Add Category</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- كارد Manage Products -->
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <img src="~/images/ManageProducts.png" class="card-img-top" alt="Manage Products">
+                <div class="card-body">
+                    <h5 class="card-title">Manage Products</h5>
+                    <p class="card-text">Manage your products inventory.</p>
+                    <a href="@Url.Action("AddProduct", "Admin")" class="btn btn-success">Go to Manage Products</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- كارد Orders -->
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <img src="~/images/order.png".jpg" class="card-img-top" alt="Orders">
+                <div class="card-body">
+                    <h5 class="card-title">Orders</h5>
+                    <p class="card-text">View and manage customer orders.</p>
+                    <a href="@Url.Action("Orders", "Admin")" class="btn btn-warning">Go to Orders</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- كارد Reports -->
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <img src="~/images/report.jpg".jpg" class="card-img-top" alt="Reports">
+                <div class="card-body">
+                    <h5 class="card-title">Reports</h5>
+                    <p class="card-text">Generate and view reports.</p>
+                    <a href="@Url.Action("Reports", "Admin")" class="btn btn-info">Go to Reports</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

@@ -1,34 +1,49 @@
 ﻿@model IEnumerable<crad_project.Models.Categories>
 
 @{
-    ViewData["Title"] = "CategoryList";
+    ViewData["Title"] = "Category List";
 }
 
-<h1>CategoryList</h1>
+<div class="container mt-5">
+    <h1 class="text-center mb-4" style="color: #2c3e50;">Category List</h1> <!-- تعديل اللون -->
+    <!-- زر إنشاء فئة جديدة -->
+    <div class="text-end mb-4">
+        <a asp-action="AddCategory" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Create New Category
+        </a>
+    </div>
 
-<p>
-    <a asp-action="AddCategory">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                <a asp-action="EditCategory" asp-route-id="@item.categoryId">Edit</a> |
-                <a asp-action="DeleteCategory" asp-route-id="@item.categoryId">Delete</a>
-            </td>
-        </tr>
+    <!-- الجدول -->
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered">
+            <thead style="background-color: #3498db; color: white;">
+                <!-- تغيير اللون -->
+                <tr>
+                    <th>Category Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td>
+                            <a asp-action="EditCategory" asp-route-id="@item.categoryId" class="btn btn-sm btn-warning">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <a asp-action="DeleteCategory" asp-route-id="@item.categoryId" class="btn btn-sm btn-danger">
+                                <i class="fas fa-trash"></i> Delete
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- إضافة FontAwesome للأيقونات -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 }
-    </tbody>
-</table>
