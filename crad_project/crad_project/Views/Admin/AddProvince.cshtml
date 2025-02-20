@@ -1,0 +1,69 @@
+﻿@model crad_project.Models.Province
+
+@{
+    ViewData["Title"] = "Add Province";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-5">
+                    <h2 class="card-title text-center mb-4">Add New Province</h2>
+                    <form asp-action="AddProvince" class="needs-validation" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <!-- حقل الاسم -->
+                        <div class="form-group mb-4">
+                            <label asp-for="Name" class="form-label">Province Name</label>
+                            <input asp-for="Name" class="form-control form-control-lg" placeholder="Enter province name" required />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                            <div class="invalid-feedback">Please enter a province name.</div>
+                        </div>
+
+                        <!-- زر الإرسال -->
+                        <div class="form-group text-center mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg w-100">
+                                <i class="fas fa-plus"></i> Create Province
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="text-center mt-4">
+                        <a asp-action="ProvinceList" class="btn btn-outline-success">
+                            <i class="fas fa-list-alt"></i> See the Province List
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <!-- إضافة FontAwesome للأيقونات -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <!-- تحسينات تفاعلية -->
+    <script>
+        (function () {
+            'use strict';
+
+            // إضافة التحقق من الحقول المطلوبة
+            var forms = document.querySelectorAll('.needs-validation');
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+    </script>
+}

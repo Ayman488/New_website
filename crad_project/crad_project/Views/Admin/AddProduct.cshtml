@@ -1,113 +1,20 @@
-﻿@model crad_project.Models.Product
-
-@{
-    ViewData["Title"] = "Add Product";
+﻿@{
+    ViewBag.Title = "Add Product";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml"; // استخدام Layout الإدارة
 }
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-sm border-0">
-                <div class="card-body p-5">
-                    <h2 class="card-title text-center mb-4">Add New Product</h2>
-                    <form asp-action="AddProduct" enctype="multipart/form-data" class="needs-validation" novalidate>
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<h1>Add Product</h1>
 
-                        <!-- حقل الاسم -->
-                        <div class="form-group mb-4">
-                            <label asp-for="Name" class="form-label">Product Name</label>
-                            <input asp-for="Name" class="form-control form-control-lg" placeholder="Enter product name" required />
-                            <span asp-validation-for="Name" class="text-danger"></span>
-                            <div class="invalid-feedback">Please enter a product name.</div>
-                        </div>
-
-                        <!-- حقل الوصف -->
-                        <div class="form-group mb-4">
-                            <label asp-for="Description" class="form-label">Description</label>
-                            <textarea asp-for="Description" class="form-control form-control-lg" placeholder="Enter product description" rows="3" required></textarea>
-                            <span asp-validation-for="Description" class="text-danger"></span>
-                            <div class="invalid-feedback">Please enter a product description.</div>
-                        </div>
-
-                        <!-- حقل السعر -->
-                        <div class="form-group mb-4">
-                            <label asp-for="Price" class="form-label">Price</label>
-                            <input asp-for="Price" class="form-control form-control-lg" placeholder="Enter product price" required />
-                            <span asp-validation-for="Price" class="text-danger"></span>
-                            <div class="invalid-feedback">Please enter a valid price.</div>
-                        </div>
-
-                        <!-- حقل الكمية -->
-                        <div class="form-group mb-4">
-                            <label asp-for="Stock" class="form-label">Stock</label>
-                            <input asp-for="Stock" class="form-control form-control-lg" placeholder="Enter stock quantity" required />
-                            <span asp-validation-for="Stock" class="text-danger"></span>
-                            <div class="invalid-feedback">Please enter a valid stock quantity.</div>
-                        </div>
-
-                        <!-- حقل الفئة -->
-                        <div class="form-group mb-4">
-                            <label asp-for="CategoryId" class="form-label">Category</label>
-                            <select asp-for="CategoryId" class="form-control form-control-lg" asp-items="ViewBag.Categories" required>
-                                <option value="">Select a category</option>
-                            </select>
-                            <span asp-validation-for="CategoryId" class="text-danger"></span>
-                            <div class="invalid-feedback">Please select a category.</div>
-                        </div>
-
-                        <!-- حقل تحميل الصور -->
-                        <div class="form-group mb-4">
-                            <label for="ImageFiles" class="form-label">Product Images</label>
-                            <input type="file" name="imageFiles" class="form-control form-control-lg" multiple required />
-                            <span asp-validation-for="ImageUrls" class="text-danger"></span>
-                            <div class="invalid-feedback">Please upload at least one image.</div>
-                        </div>
-
-                        <!-- حقل تاريخ الإنشاء -->
-                        <div class="form-group mb-4">
-                            <label asp-for="CreatedAt" class="form-label">Created At</label>
-                            <input asp-for="CreatedAt" class="form-control form-control-lg" required />
-                            <span asp-validation-for="CreatedAt" class="text-danger"></span>
-                            <div class="invalid-feedback">Please enter a valid date.</div>
-                        </div>
-
-                        <!-- زر الإرسال -->
-                        <div class="form-group text-center mt-4">
-                            <button type="submit" class="btn btn-primary btn-lg w-100">
-                                <i class="fas fa-plus"></i> Create Product
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+<form asp-action="AddProduct" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="productCategory">Select Product Category</label>
+        <select class="form-control" id="productCategory" name="category">
+            <option value="Mobiles">Mobiles</option>
+            <option value="Laptops">Laptops</option>
+            <option value="Accessories">Accessories</option>
+            <option value="Watches">Watches</option>
+        </select>
     </div>
-</div>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-
-    <!-- إضافة FontAwesome للأيقونات -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
-    <!-- تحسينات تفاعلية -->
-    <script>
-        (function () {
-            'use strict';
-
-            // إضافة التحقق من الحقول المطلوبة
-            var forms = document.querySelectorAll('.needs-validation');
-            Array.prototype.slice.call(forms).forEach(function (form) {
-                form.addEventListener('submit', function (event) {
-                    if (!form.checkValidity()) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        })();
-    </script>
-}
+    <button type="submit" class="btn btn-primary mt-3">Next</button>
+</form>

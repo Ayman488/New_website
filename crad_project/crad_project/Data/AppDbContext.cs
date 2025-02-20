@@ -19,10 +19,14 @@ namespace crad_project.Data
         public DbSet<Reviews> Reviews { get; set; }
         public DbSet<Province> Provinces { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
+        public DbSet<SubCategory> SubCategories { get; set; }
+        public DbSet<Mobile> Mobiles { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             // العلاقة بين User و Address (عبر UserAddress)
             modelBuilder.Entity<UserAddress>()
                 .HasKey(ua => new { ua.UserId, ua.AddressId });
@@ -37,66 +41,70 @@ namespace crad_project.Data
                 .WithMany(a => a.UserAddresses)
                 .HasForeignKey(ua => ua.AddressId);
 
-            // العلاقة بين Address و Province (كل عنوان مرتبط بمحافظة واحدة)
+            // العلاقة بين Address و Province
             modelBuilder.Entity<Address>()
                 .HasOne(a => a.Province)
                 .WithMany(p => p.Addresses)
                 .HasForeignKey(a => a.ProvinceId);
 
-            // العلاقة بين Order و User (كل طلب مرتبط بمستخدم)
+            // العلاقة بين Order و User
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.User)
                 .WithMany(u => u.Orders)
                 .HasForeignKey(o => o.UserId);
 
-            
-            // العلاقة بين Product و Category (كل منتج ينتمي إلى تصنيف واحد)
+            // العلاقة بين Product و Category
             modelBuilder.Entity<Product>()
                 .HasOne(p => p.Category)
                 .WithMany(c => c.Products)
                 .HasForeignKey(p => p.CategoryId);
 
-            // العلاقة بين Payment و Order (كل طلب له دفعة واحدة)
+            // العلاقة بين Payment و Order
             modelBuilder.Entity<Payments>()
                 .HasOne(p => p.Order)
                 .WithOne(o => o.Payment)
                 .HasForeignKey<Payments>(p => p.OrderId);
 
-            // العلاقة بين Review و User (كل تقييم مكتوب من قبل مستخدم)
+            // العلاقة بين Review و User
             modelBuilder.Entity<Reviews>()
                 .HasOne(r => r.User)
                 .WithMany(u => u.Reviews)
                 .HasForeignKey(r => r.UserId);
 
-            // العلاقة بين Review و Product (كل تقييم مرتبط بمنتج واحد)
+            // العلاقة بين Review و Product
             modelBuilder.Entity<Reviews>()
                 .HasOne(r => r.Product)
                 .WithMany(p => p.Reviews)
                 .HasForeignKey(r => r.ProductId);
 
-            // تعريف العلاقات
-            modelBuilder.Entity<UserAddress>()
-                .HasKey(ua => new { ua.UserId, ua.AddressId });
-
-            modelBuilder.Entity<UserAddress>()
-                .HasOne(ua => ua.User)
-                .WithMany(u => u.UserAddresses)
-                .HasForeignKey(ua => ua.UserId);
-
-            modelBuilder.Entity<UserAddress>()
-                .HasOne(ua => ua.Address)
-                .WithMany(a => a.UserAddresses)
-                .HasForeignKey(ua => ua.AddressId);
-
+            // العلاقة بين OrderItems و Order
             modelBuilder.Entity<OrderItems>()
                 .HasOne(oi => oi.Order)
                 .WithMany(o => o.OrderItems)
                 .HasForeignKey(oi => oi.OrderId);
 
+            // العلاقة بين OrderItems و Product
             modelBuilder.Entity<OrderItems>()
                 .HasOne(oi => oi.Product)
                 .WithMany(p => p.OrderItems)
                 .HasForeignKey(oi => oi.ProductId);
+
+            // العلاقة بين SubCategory و Category
+            modelBuilder.Entity<SubCategory>()
+                .HasOne(sc => sc.Category)
+                .WithMany(c => c.SubCategories)
+                .HasForeignKey(sc => sc.CategoryId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
+            modelBuilder.Entity<Mobile>()
+                .HasKey(m => m.MobileId);
+            modelBuilder.Entity<Mobile>()
+                .HasOne(m => m.SubCategory)
+                .WithMany(sc => sc.Mobiles)
+                .HasForeignKey(m => m.SubCategoryId);
+
+
         }
     }
 }

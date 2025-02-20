@@ -1,7 +1,10 @@
-﻿namespace crad_project.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace crad_project.Models
 {
     public class Order
     {
+        [Key]
         public int orderId { get; set; }
         public int UserId { get; set; }
         public decimal TotalPrice { get; set; }

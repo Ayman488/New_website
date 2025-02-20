@@ -5,14 +5,15 @@ namespace crad_project.Models
     public class Product
     {
         [Key]
-        public int productId { get; set; }
+        public int ProductId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
         public int Stock { get; set; }
         public int CategoryId { get; set; }
-        public List<string> ImageUrls { get; set; } = new List<string>();
 
+        // تغيير قائمة النصوص إلى قائمة بيانات الصور الثنائية
+        public byte[] Image { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         // Navigation Properties
@@ -20,5 +21,10 @@ namespace crad_project.Models
         public ICollection<Reviews> Reviews { get; set; }
         public ICollection<OrderItems> OrderItems { get; set; }
 
+        public Product()
+        {
+            Reviews = new HashSet<Reviews>();
+            OrderItems = new HashSet<OrderItems>();
+        }
     }
 }

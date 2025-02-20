@@ -2,13 +2,12 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using crad_project.Data;
 
 #nullable disable
 
-namespace crad_project.Migrations
+namespace cradproject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -17,18 +16,14 @@ namespace crad_project.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.11")
+                .HasAnnotation("ProductVersion", "7.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
-
-            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
             modelBuilder.Entity("crad_project.Models.Address", b =>
                 {
                     b.Property<int>("addressId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("addressId"));
 
                     b.Property<int>("ProvinceId")
                         .HasColumnType("int");
@@ -49,8 +44,6 @@ namespace crad_project.Migrations
                     b.Property<int>("adminId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("adminId"));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -75,7 +68,8 @@ namespace crad_project.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("categoryId"));
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -86,13 +80,63 @@ namespace crad_project.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("crad_project.Models.Mobile", b =>
+                {
+                    b.Property<int>("MobileId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("BatterySize")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ChargingType")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("InternalStorage")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("ManufactureYear")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("OperatingSystem")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<double>("ScreenSize")
+                        .HasColumnType("double");
+
+                    b.Property<int>("SubCategoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MobileId");
+
+                    b.HasIndex("SubCategoryId");
+
+                    b.ToTable("Mobiles");
+                });
+
             modelBuilder.Entity("crad_project.Models.Order", b =>
                 {
                     b.Property<int>("orderId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("orderId"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
@@ -119,8 +163,6 @@ namespace crad_project.Migrations
                     b.Property<int>("orederItemId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("orederItemId"));
 
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
@@ -149,8 +191,6 @@ namespace crad_project.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("paymentId"));
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
@@ -175,11 +215,9 @@ namespace crad_project.Migrations
 
             modelBuilder.Entity("crad_project.Models.Product", b =>
                 {
-                    b.Property<int>("productId")
+                    b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("productId"));
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
@@ -191,9 +229,9 @@ namespace crad_project.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("ImageUrls")
+                    b.Property<byte[]>("Image")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("longblob");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -205,7 +243,7 @@ namespace crad_project.Migrations
                     b.Property<int>("Stock")
                         .HasColumnType("int");
 
-                    b.HasKey("productId");
+                    b.HasKey("ProductId");
 
                     b.HasIndex("CategoryId");
 
@@ -217,8 +255,6 @@ namespace crad_project.Migrations
                     b.Property<int>("provinceId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("provinceId"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -234,8 +270,6 @@ namespace crad_project.Migrations
                     b.Property<int>("reviewId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("reviewId"));
 
                     b.Property<string>("Comment")
                         .IsRequired()
@@ -262,13 +296,31 @@ namespace crad_project.Migrations
                     b.ToTable("Reviews");
                 });
 
+            modelBuilder.Entity("crad_project.Models.SubCategory", b =>
+                {
+                    b.Property<int>("SubCategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("SubCategoryId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("SubCategories");
+                });
+
             modelBuilder.Entity("crad_project.Models.User", b =>
                 {
                     b.Property<int>("userId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("userId"));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -322,6 +374,17 @@ namespace crad_project.Migrations
                         .IsRequired();
 
                     b.Navigation("Province");
+                });
+
+            modelBuilder.Entity("crad_project.Models.Mobile", b =>
+                {
+                    b.HasOne("crad_project.Models.SubCategory", "SubCategory")
+                        .WithMany("Mobiles")
+                        .HasForeignKey("SubCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SubCategory");
                 });
 
             modelBuilder.Entity("crad_project.Models.Order", b =>
@@ -395,6 +458,17 @@ namespace crad_project.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("crad_project.Models.SubCategory", b =>
+                {
+                    b.HasOne("crad_project.Models.Categories", "Category")
+                        .WithMany("SubCategories")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("crad_project.Models.UserAddress", b =>
                 {
                     b.HasOne("crad_project.Models.Address", "Address")
@@ -422,6 +496,8 @@ namespace crad_project.Migrations
             modelBuilder.Entity("crad_project.Models.Categories", b =>
                 {
                     b.Navigation("Products");
+
+                    b.Navigation("SubCategories");
                 });
 
             modelBuilder.Entity("crad_project.Models.Order", b =>
@@ -442,6 +518,11 @@ namespace crad_project.Migrations
             modelBuilder.Entity("crad_project.Models.Province", b =>
                 {
                     b.Navigation("Addresses");
+                });
+
+            modelBuilder.Entity("crad_project.Models.SubCategory", b =>
+                {
+                    b.Navigation("Mobiles");
                 });
 
             modelBuilder.Entity("crad_project.Models.User", b =>

@@ -1,0 +1,84 @@
+﻿@model crad_project.Models.Mobile
+
+@{
+    ViewBag.Title = "Add Mobile";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Add Mobile</h1>
+
+<form asp-action="SaveMobile" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="name">Mobile Name</label>
+        <input type="text" class="form-control" id="name" name="Name" required />
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" name="Description"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="price">Price</label>
+        <input type="number" class="form-control" id="price" name="Price" required />
+    </div>
+
+    <div class="form-group">
+        <label for="color">Color</label>
+        <input type="text" class="form-control" id="color" name="Color" />
+    </div>
+
+    <div class="form-group">
+        <label for="internalStorage">Internal Storage</label>
+        <select class="form-control" id="internalStorage" name="InternalStorage">
+            <option value="64GB">64GB</option>
+            <option value="128GB">128GB</option>
+            <option value="256GB">256GB</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="chargingType">Charging Type</label>
+        <select class="form-control" id="chargingType" name="ChargingType">
+            <option value="USB-C">USB-C</option>
+            <option value="Micro-USB">Micro-USB</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="batterySize">Battery Size (mAh)</label>
+        <input type="number" class="form-control" id="batterySize" name="BatterySize" />
+    </div>
+
+    <div class="form-group">
+        <label for="screenSize">Screen Size (inches)</label>
+        <input type="number" class="form-control" id="screenSize" name="ScreenSize" step="0.1" />
+    </div>
+
+    <div class="form-group">
+        <label for="operatingSystem">Operating System</label>
+        <input type="text" class="form-control" id="operatingSystem" name="OperatingSystem" />
+    </div>
+
+    <div class="form-group">
+        <label for="manufactureYear">Year of Manufacture</label>
+        <input type="number" class="form-control" id="manufactureYear" name="ManufactureYear" />
+    </div>
+
+    <div class="form-group">
+        <label for="subCategory">Sub-Category</label>
+        <select class="form-control" id="subCategory" name="SubCategoryId">
+            @foreach (var subCategory in ViewBag.SubCategories)
+            {
+                <option value="@subCategory.SubCategoryId">@subCategory.Name</option>
+            }
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="images">Upload Images</label>
+        <input type="file" class="form-control" id="images" name="images" multiple />
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Save</button>
+</form>

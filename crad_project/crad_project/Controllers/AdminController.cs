@@ -14,114 +14,276 @@ namespace crad_project.Controllers
         {
             _appDbContext = appDbContext;
         }
-        public IActionResult WelcomeAdmin()
+        public async Task<IActionResult> WelcomeAdmin()
         {
+            if (User.IsInRole("Admin")) // تحقق من دور المستخدم
+            {
+                ViewBag.Layout = "_AdminLayout"; // استخدام Layout الإدارة
+            }
+            else
+            {
+                ViewBag.Layout = "_Layout"; // استخدام Layout العام
+            }
             return View();
         }
 
-
-        //Categories
-        public IActionResult AddCategory()
+        // عرض نموذج إضافة فئة
+        public async Task<IActionResult> AddCategory()
         {
-            return View();
-        }
-        [HttpPost]
-        public async Task<IActionResult> AddCategory(Categories model)
-        {
-                _appDbContext.Categories.Add(model);
-                await _appDbContext.SaveChangesAsync();
-                return RedirectToAction("CategoryList"); // الانتقال إلى قائمة التصنيفات بعد الإضافة
-        }
-
-        // ✅ جلب قائمة التصنيفات وعرضها
-        public async Task<IActionResult> CategoryList()
-        {
+            // جلب القائمة من قاعدة البيانات
             var categories = await _appDbContext.Categories.ToListAsync();
-            return View(categories);
+
+            // تمرير القائمة والعنصر الجديد إلى العرض
+            ViewBag.CategoriesList = categories; // القائمة
+            return View(new Categories()); // العنصر الجديد
         }
 
-        // ✅ تعديل التصنيف (GET)
-        public async Task<IActionResult> EditCategory(int id)
-        {
-            var category = await _appDbContext.Categories.FindAsync(id);
-            if (category == null) return NotFound();
-            return View(category);
-        }
-
-        // ✅ تعديل التصنيف (POST)
         [HttpPost]
-        public async Task<IActionResult> EditCategory(Categories model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddCategory(Categories category)
         {
-                _appDbContext.Categories.Update(model);
+                // إضافة الفئة الجديدة إلى قاعدة البيانات
+                _appDbContext.Categories.Add(category);
                 await _appDbContext.SaveChangesAsync();
-                return RedirectToAction("CategoryList");    
+
+                return RedirectToAction(nameof(AddCategory)); // إعادة التوجيه إلى نفس الصفحة
         }
-        public async Task<IActionResult> DeleteCategory(int id)
-        {
-            var category = await _appDbContext.Categories.FindAsync(id);
-            if (category == null) return NotFound();
-            return View(category);
-        }
-        // ✅ حذف التصنيف
         [HttpPost]
-        public async Task<IActionResult> DeleteCategory(Categories model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteCategory(int categoryId)
         {
-            _appDbContext.Categories.Remove(model);
-            await _appDbContext.SaveChangesAsync();
-            return RedirectToAction("CategoryList");
+            var category = await _appDbContext.Categories.FindAsync(categoryId);
+
+            if (category != null)
+            {
+                _appDbContext.Categories.Remove(category);
+                await _appDbContext.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(AddCategory)); // إعادة التوجيه إلى نفس الصفحة
         }
 
 
+        public async Task<IActionResult> EditCategory(int categoryId)
+        {
+            var category = await _appDbContext.Categories.FindAsync(categoryId);
 
+            if (category == null)
+            {
+                return NotFound(); // إذا لم يتم العثور على العنصر
+            }
+
+            var categories = await _appDbContext.Categories.ToListAsync();
+            ViewBag.CategoriesList = categories; // تمرير القائمة لعرضها أسفل النموذج
+
+            return View("AddCategory", category); // عرض النموذج الحالي مع البيانات الموجودة
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditCategory(Categories category)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingCategory = await _appDbContext.Categories.FindAsync(category.categoryId);
+
+                if (existingCategory != null)
+                {
+                    // تعديل القيم
+                    existingCategory.Name = category.Name;
+                    existingCategory.IsActive = category.IsActive;
+
+                    // حفظ التعديلات
+                    await _appDbContext.SaveChangesAsync();
+                }
+
+                return RedirectToAction(nameof(AddCategory)); // إعادة التوجيه إلى الصفحة الرئيسية
+            }
+
+            // إذا كان هناك أخطاء، إعادة تمرير البيانات إلى العرض
+            ViewBag.CategoriesList = await _appDbContext.Categories.ToListAsync();
+            return View("AddCategory", category);
+        }
+
+        // عرض صفحة إدارة SubCategories
+        public IActionResult SubCategory()
+        {
+            // جلب جميع الفئات (Categories) لتمريرها إلى الـ View
+            var categories = _appDbContext.Categories
+                .Where(c => c.IsActive)
+                .ToList();
+
+            // جلب جميع الفئات الفرعية (SubCategories) مع الفئات الرئيسية المرتبطة بها
+            var subCategories = _appDbContext.SubCategories
+                .Include(sc => sc.Category)
+                .ToList();
+
+            // تمرير البيانات إلى الـ View
+            ViewBag.SubCategories = subCategories; // الفئات الفرعية
+            return View(categories); // تمرير الفئات كـ Model
+        }
+
+        // إضافة SubCategory جديد
+        [HttpPost]
+        public IActionResult AddSubCategory(string name, int categoryId)
+        {
+            if (string.IsNullOrWhiteSpace(name) || categoryId <= 0)
+            {
+                ModelState.AddModelError("", "All fields are required.");
+                return RedirectToAction("SubCategory");
+            }
+
+            var subCategory = new SubCategory
+            {
+                Name = name,
+                CategoryId = categoryId
+            };
+
+            _appDbContext.SubCategories.Add(subCategory);
+            _appDbContext.SaveChanges();
+
+            TempData["SuccessMessage"] = "SubCategory added successfully!";
+            return RedirectToAction("SubCategory");
+        }
+        // ✅
         //Products
-
-
-        // عرض نموذج إضافة منتج
+        // لاضافة المنتج 
+        [HttpGet]
         public IActionResult AddProduct()
         {
-            ViewBag.Categories = new SelectList(_appDbContext.Categories, "categoryId", "Name");
+            var subcategories = _appDbContext.SubCategories.ToList();
+            ViewBag.SubCategories = subcategories; // إرسال جميع الـ SubCategories إلى الـ View
             return View();
         }
 
-        // إضافة منتج (POST)
         [HttpPost]
-        public async Task<IActionResult> AddProduct(Product model, List<IFormFile> imageFiles)
+        public IActionResult AddProduct(string category)
         {
-            // التحقق من وجود صورة تم تحميلها
-            var imageUrls = new List<string>();
-
-            // التحقق من وجود صور تم تحميلها
-            if (imageFiles != null && imageFiles.Count > 0)
+            // التحقق من الفئة المختارة
+            
+            if (category == "Mobiles")
             {
-                foreach (var imageFile in imageFiles)
+
+                // تصفية الـ SubCategories بناءً على فئة "Mobiles"
+                ViewBag.SubCategories = _appDbContext.SubCategories
+                    .Where(sc => sc.Category.Name == "Phones")
+                    .ToList();
+
+                // إعادة التوجيه إلى صفحة AddMobile
+                return View("AddMobile");
+            }
+
+            // في حال كانت الفئة مختلفة (مستقبلاً يمكن إضافة المزيد من الفئات هنا)
+            
+            return RedirectToAction("AddProduct");
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> SaveMobile(Mobile mobile, List<IFormFile> images)
+        {
+            if (ModelState.IsValid)
+            {
+                if (images != null && images.Count > 0)
                 {
-                    if (imageFile.Length > 0)
+                    foreach (var imageFile in images)
                     {
-                        // تحديد اسم الصورة ومسار حفظها
-                        var fileName = Path.GetFileName(imageFile.FileName);
-                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
-
-                        // حفظ الصورة في المجلد
-                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        if (imageFile != null && imageFile.Length > 0)
                         {
-                            await imageFile.CopyToAsync(stream);
+                            using (var memoryStream = new MemoryStream())
+                            {
+                                // قراءة البيانات وتحويلها إلى byte[]
+                                await imageFile.CopyToAsync(memoryStream);
+                                mobile.Images.Add(memoryStream.ToArray()); // تخزين الصورة كـ byte[] في قائمة الصور
+                            }
                         }
-
-                        // إضافة المسار إلى قائمة الصور
-                        imageUrls.Add("/images/" + fileName);
                     }
                 }
 
-                // حفظ قائمة مسارات الصور في قاعدة البيانات
-                model.ImageUrls = imageUrls;
-            }
-            _appDbContext.Products.Add(model);
+                // حفظ البيانات في قاعدة البيانات
+                _appDbContext.Mobiles.Add(mobile);
                 await _appDbContext.SaveChangesAsync();
-                return RedirectToAction("ProductList"); // الانتقال إلى قائمة المنتجات بعد الإضافة
-            
+
+                return RedirectToAction("ProductList"); // عرض قائمة المنتجات
+            }
+
+            // إذا كان هناك خطأ، إعادة عرض الصفحة مع البيانات
+            ViewBag.SubCategories = _appDbContext.SubCategories
+                .Where(sc => sc.Category.Name == "Mobiles")
+                .ToList();
+
+            return View("AddMobile", mobile);
         }
 
 
+
+
+        //Province
+
+
+        // عرض صفحة إضافة محافظة (GET)
+        public IActionResult AddProvince()
+        {
+            return View();
+        }
+
+        // إضافة محافظة (POST)
+        [HttpPost]
+        public async Task<IActionResult> AddProvince(Province model)
+        {
+            // إضافة المحافظة إلى قاعدة البيانات
+            _appDbContext.Provinces.Add(model);
+            await _appDbContext.SaveChangesAsync();
+
+            return RedirectToAction("ProvinceList"); // الانتقال إلى قائمة المحافظات بعد الإضافة
+
+        }
+
+        // عرض قائمة المحافظات
+        public IActionResult ProvinceList()
+        {
+            var provinces = _appDbContext.Provinces.ToList();
+            return View(provinces);
+        }
+
+        // حذف محافظة
+        public async Task<IActionResult> DeleteProvince(int id)
+        {
+            var province = await _appDbContext.Provinces.FindAsync(id);
+            if (province == null) return NotFound(); // في حال لم يتم العثور على المحافظة
+            return View(province); // عرض الصفحة للتأكيد
+        }
+
+        // حذف محافظة (POST)
+        [HttpPost, ActionName("DeleteProvince")]
+        public async Task<IActionResult> DeleteConfirmedP(int id)
+        {
+            var province = await _appDbContext.Provinces.FindAsync(id);
+            if (province == null) return NotFound();
+
+            _appDbContext.Provinces.Remove(province);
+            await _appDbContext.SaveChangesAsync();
+            return RedirectToAction("ProvinceList"); // الانتقال إلى قائمة المحافظات بعد الحذف
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// 
         public async Task<IActionResult> ProductList()
         {
             var products = await _appDbContext.Products.Include(p => p.Category).ToListAsync();
@@ -149,35 +311,39 @@ namespace crad_project.Controllers
         [HttpPost]
         public async Task<IActionResult> EditProduct(Product model, List<IFormFile> imageFiles)
         {
-            var imageUrls = new List<string>();
+            // التحقق إذا كانت صورة قد تم تحميلها
             if (imageFiles != null && imageFiles.Count > 0)
             {
+                var imageData = new byte[0]; // إنشاء مصفوفة فارغة لتخزين الصورة
+
                 foreach (var imageFile in imageFiles)
                 {
                     if (imageFile.Length > 0)
                     {
-                        // تحديد اسم الصورة ومسار حفظها
-                        var fileName = Path.GetFileName(imageFile.FileName);
-                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
-
-                        // حفظ الصورة في المجلد
-                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        using (var memoryStream = new MemoryStream())
                         {
-                            await imageFile.CopyToAsync(stream);
-                        }
+                            // نسخ محتوى الصورة إلى MemoryStream
+                            await imageFile.CopyToAsync(memoryStream);
 
-                        // إضافة المسار إلى قائمة الصور
-                        imageUrls.Add("/images/" + fileName);
+                            // إضافة الصورة المحفوظة كـ byte[] إلى متغير imageData
+                            imageData = memoryStream.ToArray();
+                        }
                     }
                 }
 
-                // حفظ قائمة مسارات الصور في قاعدة البيانات
-                model.ImageUrls = imageUrls;
+                // حفظ الصورة كـ byte[] في قاعدة البيانات
+                model.Image = imageData;
             }
+
+            // تحديث المنتج في قاعدة البيانات
             _appDbContext.Products.Update(model);
-                await _appDbContext.SaveChangesAsync();
-                return RedirectToAction("ProductList");
+            await _appDbContext.SaveChangesAsync();
+
+            return RedirectToAction("ProductList");
         }
+
+
+
         // عرض نموذج حذف منتج
         public async Task<IActionResult> DeleteProduct(int id)
         {

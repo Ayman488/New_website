@@ -1,0 +1,59 @@
+﻿@model List<crad_project.Models.Categories>
+@{
+    ViewBag.Title = "Add and View Sub-Categories";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml"; // استخدام Layout الإدارة مباشرة
+}
+
+<h1>Manage Sub-Categories</h1>
+
+<!-- النموذج لإضافة الفئة الفرعية -->
+<form asp-action="AddSubCategory" method="post">
+    <div class="form-group">
+        <label for="name">Sub-Category Name</label>
+        <input type="text" class="form-control" id="name" name="name" required />
+    </div>
+    <div class="form-group">
+        <label for="category">Select Category</label>
+        <select class="form-control" id="category" name="categoryId" required>
+            @if (Model != null && Model.Count > 0)
+            {
+                @foreach (var category in Model)
+                {
+                    <option value="@category.categoryId">@category.Name</option>
+                }
+            }
+            else
+            {
+                <option disabled>No Categories Available</option>
+            }
+        </select>
+
+    </div>
+    <button type="submit" class="btn btn-primary">Add Sub-Category</button>
+</form>
+
+<!-- جدول عرض الفئات الفرعية -->
+@if (ViewBag.SubCategories != null)
+{
+    <table class="table mt-4">
+        <thead>
+            <tr>
+                <th>Sub-Category Name</th>
+                <th>Main Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var subCategory in ViewBag.SubCategories)
+            {
+                <tr>
+                    <td>@subCategory.Name</td>
+                    <td>@subCategory.Category?.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No Sub-Categories available.</p>
+}

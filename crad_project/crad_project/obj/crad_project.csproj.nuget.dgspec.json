@@ -1,24 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\53601\\Desktop\\New_project\\Website\\crad_project\\crad_project\\crad_project.csproj": {}
+    "D:\\dounlodes\\New_project\\New_project\\Website\\crad_project\\crad_project\\crad_project.csproj": {}
   },
   "projects": {
-    "C:\\Users\\53601\\Desktop\\New_project\\Website\\crad_project\\crad_project\\crad_project.csproj": {
+    "D:\\dounlodes\\New_project\\New_project\\Website\\crad_project\\crad_project\\crad_project.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\53601\\Desktop\\New_project\\Website\\crad_project\\crad_project\\crad_project.csproj",
+        "projectUniqueName": "D:\\dounlodes\\New_project\\New_project\\Website\\crad_project\\crad_project\\crad_project.csproj",
         "projectName": "crad_project",
-        "projectPath": "C:\\Users\\53601\\Desktop\\New_project\\Website\\crad_project\\crad_project\\crad_project.csproj",
-        "packagesPath": "C:\\Users\\53601\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\53601\\Desktop\\New_project\\Website\\crad_project\\crad_project\\obj\\",
+        "projectPath": "D:\\dounlodes\\New_project\\New_project\\Website\\crad_project\\crad_project\\crad_project.csproj",
+        "packagesPath": "C:\\Users\\97150\\.nuget\\packages\\",
+        "outputPath": "D:\\dounlodes\\New_project\\New_project\\Website\\crad_project\\crad_project\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\53601\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\97150\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net8.0"
+          "net7.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -26,8 +26,8 @@
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net8.0": {
-            "targetAlias": "net8.0",
+          "net7.0": {
+            "targetAlias": "net7.0",
             "projectReferences": {}
           }
         },
@@ -35,40 +35,35 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
-        "net8.0": {
-          "targetAlias": "net8.0",
+        "net7.0": {
+          "targetAlias": "net7.0",
           "dependencies": {
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.11, )"
+              "version": "[7.0.2, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.11, )"
+              "version": "[7.0.2, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.8, )"
+              "version": "[7.0.2, )"
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
-              "version": "[8.0.7, )"
+              "version": "[7.0.0, )"
             },
             "Pomelo.EntityFrameworkCore.MySql": {
               "target": "Package",
-              "version": "[8.0.2, )"
+              "version": "[7.0.0, )"
             }
           },
           "imports": [
@@ -90,7 +85,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
         }
       }
     }
